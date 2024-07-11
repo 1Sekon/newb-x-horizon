@@ -7,15 +7,7 @@
 // sunlight tinting
 vec3 sunLightTint(float dayFactor, float rain, vec3 FOG_COLOR) {
 
-  float tintFactor = FOG_COLOR.g + 0.1*FOG_COLOR.r;
-  float noon = clamp((tintFactor-0.37)/0.45,0.0,1.0);
-  float morning = clamp((tintFactor-0.05)*3.125,0.0,1.0);
-
-  vec3 clearTint = mix(
-    mix(NL_NIGHT_SUN_COL, NL_MORNING_SUN_COL, morning),
-    mix(NL_MORNING_SUN_COL, NL_NOON_SUN_COL, noon),
-    dayFactor
-  );
+  vec3 clearTint = mix(mix(NL_NOON_SUN_COL, NL_MORNING_SUN_COL, duskD(FOG_COLOR)), NL_NIGHT_SUN_COL, nightD(FOG_COLOR));
 
   float r = 1.0-rain;
   r *= r;
@@ -43,9 +35,9 @@ vec3 nlLighting(
 
   float torchAttenuation = (NL_TORCH_INTENSITY*uv1.x)/(0.5-0.45*lit.x);
 
-  #ifdef NL_BLINKING_TORCH
-    torchAttenuation *= 1.0 - 0.19*noise1D(t*8.0);
-  #endif
+#ifdef NL_BLINKING_TORCH
+  torchAttenuation *= 1.0 - 0.19*noise1D(t*8.0);
+#endif
 
   vec3 torchLight = torchColor*torchAttenuation;
 
@@ -61,7 +53,7 @@ vec3 nlLighting(
     float dayFactor = min(dot(FOG_COLOR.rgb, vec3(0.5,0.4,0.4))*(1.0 + 1.9*rainFactor), 1.0);
     float nightFactor = 1.0-dayFactor*dayFactor;
     float rainDim = min(FOG_COLOR.g, 0.25)*rainFactor;
-    float lightIntensity = NL_SUN_INTENSITY*(1.0 - rainDim)*(1.0 + NL_NIGHT_BRIGHTNESS*nightFactor);
+    float lightIntensity = mix(mix(NL_SUN_INTENSITY*(1.0 - rainDim), 0.9*(1.0 - rainDim), duskD(FOG_COLOR)), NL_SUN_INTENSITY*(0.5 + NL_NIGHT_BRIGHTNESS), nightD(FOG_COLOR));
 
     // min ambient in caves
     light = vec3_splat((1.35+NL_CAVE_BRIGHTNESS)*(1.0-uv1.x)*(1.0-uv1.y));
@@ -109,23 +101,23 @@ void nlUnderwaterLighting(inout vec3 light, inout vec3 pos, vec2 lit, vec2 uv1, 
     light += NL_UNDERWATER_BRIGHTNESS + NL_CAUSTIC_INTENSITY*caustics*(0.1 + lit.y + lit.x*0.7);
   }
   light *= mix(normalize(horizonCol), vec3(1.0,1.0,1.0), lit.y*0.6);
-  #ifdef NL_UNDERWATER_WAVE
-    pos.xy += NL_UNDERWATER_WAVE*min(0.05*pos.z,0.6)*sin(t*1.2 + dot(cPos,vec3_splat(NL_CONST_PI_HALF)));
-  #endif
+#ifdef NL_UNDERWATER_WAVE
+  pos.xy += NL_UNDERWATER_WAVE*min(0.05*pos.z,0.6)*sin(t*1.2 + dot(cPos,vec3_splat(NL_CONST_PI_HALF)));
+#endif
 }
 
 vec3 nlActorLighting(vec3 pos, vec4 normal, mat4 world, vec4 tileLightCol, vec4 overlayCol, vec3 horizonCol, bool nether, bool underWater, bool end, float t) {
   float intensity;
-  #ifdef FANCY
-    vec3 N = normalize(mul(world, normal)).xyz;
-    N.y *= tileLightCol.w;
-    N.xz *= N.xz;
+#ifdef FANCY
+  vec3 N = normalize(mul(world, normal)).xyz;
+  N.y *= tileLightCol.w;
+  N.xz *= N.xz;
 
-    intensity = 0.75 + N.y*0.25 - N.x*0.1 + N.z*0.1;
-    intensity *= intensity;
-  #else
-    intensity = (0.7+0.3*abs(normal.y))*(0.9+0.1*abs(normal.x));
-  #endif
+  intensity = 0.75 + N.y*0.25 - N.x*0.1 + N.z*0.1;
+  intensity *= intensity;
+#else
+  intensity = (0.7+0.3*abs(normal.y))*(0.9+0.1*abs(normal.x));
+#endif
 
   intensity *= tileLightCol.b*tileLightCol.b*NL_SUN_INTENSITY*1.2;
   intensity += overlayCol.a * 0.35;

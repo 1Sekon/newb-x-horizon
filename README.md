@@ -1,15 +1,14 @@
-# Newb X Legacy
+![Title](docs/title.png "Title")
+# Newb X Horizon
 
-**Newb X Legacy** is a RenderDragon successor to the legacy GLSL shader, [Newb Shader](https://github.com/devendrn/newb-shader-mcbe). It is an enhanced vanilla shader that focuses on being lightweight and having soft aesthetics. It supports Minecraft Bedrock 1.21 (Windows/Android/*iOS).
-
-> [!WARNING]
-> This is an experimental repository, breaking changes are made often.
-
-![Screenshots](docs/screenshots.jpg "Newb X Legacy 15.47, MCBE 1.21.0")
+![Screenshot](docs/screenshots.jpg "NewbXHorizon")
 
 ## Downloads
+Download in the Official Newb Discord server.
 
-Nightly builds for Android (ESSL) and Windows (DX) can be found at the [Discord server](https://discord.gg/newb-community-844591537430069279).
+> [Newb X Legacy](https://discord.gg/newb-community-844591537430069279)
+>
+> [Newb X Horizon (under preparation)](https://discord.gg/newb-community-844591537430069279)
 
 ## Installation
 

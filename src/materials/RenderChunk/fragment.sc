@@ -1,4 +1,4 @@
-$input v_color0, v_color1, v_fog, v_refl, v_texcoord0, v_lightmapUV, v_extra
+$input v_color0, v_color1, v_fog, v_refl, v_texcoord0, v_lightmapUV, v_extra, v_EndRefl
 
 #include <bgfx_shader.sh>
 #include <newb/main.sh>
@@ -7,30 +7,31 @@ SAMPLER2D_AUTOREG(s_MatTexture);
 SAMPLER2D_AUTOREG(s_SeasonsTexture);
 SAMPLER2D_AUTOREG(s_LightMapTexture);
 
+SAMPLER2D_AUTOREG(s_DepthText);
+
 void main() {
   vec4 diffuse;
   vec4 color;
+  float depth = texture2D(s_DepthText, v_texcoord0).r;
 
-  #if defined(DEPTH_ONLY_OPAQUE) || defined(DEPTH_ONLY)
-    diffuse = vec4(1.0,1.0,1.0,1.0);
-    color = vec4(1.0,1.0,1.0,1.0);
-  #else
-    diffuse = texture2D(s_MatTexture, v_texcoord0);
+#if defined(DEPTH_ONLY_OPAQUE) || defined(DEPTH_ONLY)
+  diffuse = vec4(1.0,1.0,1.0,1.0);
+  color = vec4(1.0,1.0,1.0,1.0);
+#else
+  diffuse.rgb = texture2D(s_MatTexture, v_texcoord0).rgb;
+  diffuse.a = texture2DLod(s_MatTexture, v_texcoord0, 0.0).a;
 
-    #ifdef ALPHA_TEST
-      if (diffuse.a < 0.6) {
-        discard;
-      }
-    #endif
+#ifdef ALPHA_TEST
+  if (diffuse.a < 0.6) {
+    discard;
+  }
+#endif
 
-    #if defined(SEASONS) && (defined(OPAQUE) || defined(ALPHA_TEST))
-      diffuse.rgb *= mix(vec3(1.0,1.0,1.0), texture2D(s_SeasonsTexture, v_color1.xy).rgb * 2.0, v_color1.z);
-    #endif
-
-    color = v_color0;
-  #endif
-
-  vec3 glow = nlGlow(s_MatTexture, v_texcoord0, v_extra.a);
+#if defined(SEASONS) && (defined(OPAQUE) || defined(ALPHA_TEST))
+  diffuse.rgb *= mix(vec3(1.0,1.0,1.0), texture2D(s_SeasonsTexture, v_color1.xy).rgb * 2.0, v_color1.z);
+#endif
+  color = v_color0;
+#endif
 
   diffuse.rgb *= diffuse.rgb;
 
@@ -39,14 +40,16 @@ void main() {
 
   color.rgb *= lightTint;
 
-  #ifdef TRANSPARENT
-    if (v_extra.b > 0.9) {
-      diffuse.rgb = vec3_splat(1.0 - NL_WATER_TEX_OPACITY*(1.0 - diffuse.b*1.8));
-      diffuse.a = color.a;
-    }
-  #else
-    diffuse.a = 1.0;
-  #endif
+  vec3 glow = nlGlow(s_MatTexture, v_texcoord0, diffuse, v_extra.a);
+
+#ifdef TRANSPARENT
+  if (v_extra.b > 0.9) {
+    diffuse.rgb = vec3_splat(1.0 - NL_WATER_TEX_OPACITY*(1.0 - diffuse.b*1.8));
+    diffuse.a = color.a;
+  }
+#else
+  diffuse.a = 1.0;
+#endif
 
   diffuse.rgb *= color.rgb;
   diffuse.rgb += glow;
@@ -62,6 +65,21 @@ void main() {
       diffuse.rgb += v_refl.rgb*mask;
     }
   }
+
+// end reflection effects
+  if (v_extra.b > 0.9) {
+    diffuse.rgb += v_EndRefl.rgb*v_EndRefl.a;
+  } else if (v_EndRefl.a > 0.0) {
+    // reflective effect - only on xz plane
+    float dy = abs(dFdy(v_extra.g));
+    if (dy < 0.0002) {
+      float mask = v_EndRefl.a*(clamp(v_extra.r*10.0,8.2,8.8)-7.8);
+      diffuse.rgb *= 1.0 - 0.6*mask;
+      diffuse.rgb += v_EndRefl.rgb*mask;
+    }
+  }
+
+  //diffuse.rgb = vec3_splat(depth);
 
   diffuse.rgb = mix(diffuse.rgb, v_fog.rgb, v_fog.a);
 

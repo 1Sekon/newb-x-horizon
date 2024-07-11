@@ -2,6 +2,11 @@
 #define TONEMAP_H
 
 vec3 colorCorrection(vec3 col) {
+
+  #ifdef CC_TEST
+    return col/(1.0+col);
+  #endif
+
   #ifdef NL_EXPOSURE
     col *= NL_EXPOSURE;
   #endif

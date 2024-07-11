@@ -3,7 +3,7 @@ $input v_texcoord0, v_fogColor, v_worldPos, v_underwaterRainTime
 #include <bgfx_shader.sh>
 #include <newb/main.sh>
 
-SAMPLER2D_AUTOREG(s_MatTexture);
+SAMPLER2D(s_MatTexture, 0);
 
 void main() {
   vec4 diffuse = texture2D(s_MatTexture, v_texcoord0);
