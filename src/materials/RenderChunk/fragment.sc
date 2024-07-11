@@ -7,12 +7,9 @@ SAMPLER2D_AUTOREG(s_MatTexture);
 SAMPLER2D_AUTOREG(s_SeasonsTexture);
 SAMPLER2D_AUTOREG(s_LightMapTexture);
 
-SAMPLER2D_AUTOREG(s_DepthText);
-
 void main() {
   vec4 diffuse;
   vec4 color;
-  float depth = texture2D(s_DepthText, v_texcoord0).r;
 
 #if defined(DEPTH_ONLY_OPAQUE) || defined(DEPTH_ONLY)
   diffuse = vec4(1.0,1.0,1.0,1.0);
@@ -78,8 +75,6 @@ void main() {
       diffuse.rgb += v_EndRefl.rgb*mask;
     }
   }
-
-  //diffuse.rgb = vec3_splat(depth);
 
   diffuse.rgb = mix(diffuse.rgb, v_fog.rgb, v_fog.a);
 
