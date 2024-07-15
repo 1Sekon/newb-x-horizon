@@ -1,12 +1,16 @@
-#ifdef OPAQUE
+#ifndef INSTANCING
 $input v_fogColor, v_worldPos, v_underwaterRainTime
 #endif
 
 #include <bgfx_shader.sh>
-#include <newb/main.sh>
+
+#ifndef INSTANCING
+  #include <newb/main.sh>
+  uniform vec4 FogAndDistanceControl;
+#endif
 
 void main() {
-#ifdef OPAQUE
+#ifndef INSTANCING
   vec3 viewDir = normalize(v_worldPos);
   bool underWater = v_underwaterRainTime.x > 0.5;
   float rainFactor = v_underwaterRainTime.y;

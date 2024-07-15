@@ -1,18 +1,21 @@
+#ifndef INSTANCING
 $input a_color0, a_position
-#ifdef OPAQUE
 $output v_fogColor, v_worldPos, v_underwaterRainTime
 #endif
 
 #include <bgfx_shader.sh>
-#include <newb/main.sh>
 
-//uniform vec4 SkyColor;
-uniform vec4 FogColor;
-uniform vec4 FogAndDistanceControl;
-uniform vec4 ViewPositionAndTime;
+#ifndef INSTANCING
+  #include <newb/main.sh>
+
+  //uniform vec4 SkyColor;
+  uniform vec4 FogColor;
+  uniform vec4 FogAndDistanceControl;
+  uniform vec4 ViewPositionAndTime;
+#endif
 
 void main() {
-#ifdef OPAQUE
+#ifndef INSTANCING
   vec3 pos = a_position;
 
   // make sky more spherical
