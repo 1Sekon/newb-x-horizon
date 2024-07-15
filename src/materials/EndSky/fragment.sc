@@ -1,11 +1,17 @@
-$input v_texcoord0, v_posTime
+#ifndef INSTANCING
+  $input v_texcoord0, v_posTime
+#endif
 
 #include <bgfx_shader.sh>
-#include <newb/main.sh>
 
-SAMPLER2D(s_MatTexture, 0);
+#ifndef INSTANCING
+  #include <newb/main.sh>
+  
+  SAMPLER2D_AUTOREG(s_MatTexture);
+#endif
 
 void main() {
+#ifndef INSTANCING
   vec4 diffuse = texture2D(s_MatTexture, v_texcoord0);
 
   // end sky gradient
@@ -17,4 +23,7 @@ void main() {
   color = colorCorrection(color);
 
   gl_FragColor = vec4(color, 1.0);
+#else
+  gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+#endif
 }

@@ -2,10 +2,14 @@ $input a_position, a_texcoord0
 $output v_texcoord0
 
 #include <bgfx_shader.sh>
-#include <newb/config.h>
+
+#ifndef INSTANCING
+  #include <newb/config.h>
+#endif
 
 void main() {
   v_texcoord0 = a_texcoord0;
+#ifndef INSTANCING
   vec3 pos = a_position;
 
   pos.xz *= NL_SUNMOON_SIZE;
@@ -17,4 +21,7 @@ void main() {
   #endif
 
   gl_Position = mul(u_modelViewProj, vec4(pos, 1.0));
+#else
+  gl_Position = vec4(0.0, 0.0, 0.0, 0.0);
+#endif
 }

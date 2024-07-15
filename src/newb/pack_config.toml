@@ -9,7 +9,7 @@ materials = ["Sky", "LegacyCubemap", "Clouds", "EndSky", "SunMoon", "RenderChunk
 # %w = patch warning, %v = version
 long = '''
 §c%w
-§7- A newb shader variant wirh a simple enhancement
+§7- A newb shader variant with a simple enhancement
 %v
 §3https://github.com/1Sekon/newb-x-horizon/
 '''
@@ -36,7 +36,7 @@ credits = '''
 define = "NO_WAVE_NO_FOG"
 materials = ["RenderChunk"]
 description = '''
-§lNo Fog and Wave§r\n - Disable fog with no plants and water effects
+§lNo Fog and Wave§r\n - Disable fog with no plants and water wave effects
 '''
 
 [[subpack]]
