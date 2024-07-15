@@ -7,12 +7,12 @@
 #ifndef INSTANCING
   #include <newb/main.sh>
   
-  SAMPLER2D_AUTOREG(s_MatTexture);
+  SAMPLER2D_AUTOREG(s_SkyTexture);
 #endif
 
 void main() {
 #ifndef INSTANCING
-  vec4 diffuse = texture2D(s_MatTexture, v_texcoord0);
+  vec4 diffuse = texture2D(s_SkyTexture, v_texcoord0);
 
   // end sky gradient
   vec3 color = renderEndSky(getEndHorizonCol(), getEndZenithCol(), normalize(v_posTime.xyz), v_posTime.w);
