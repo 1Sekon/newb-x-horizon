@@ -77,7 +77,6 @@ void main() {
     newFog = getHorizonEdgeCol(newFog.rgb, rainFactor, FogColor.rgb);
   }
 
-  // relative cam dist
   float camDist = position.z/FogControl.z;
 
   vec4 fogColor;
