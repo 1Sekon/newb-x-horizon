@@ -1,6 +1,6 @@
 #ifndef NL_CONFIG_H
 #define NL_CONFIG_H
-#define AURORA_IN_VC
+
 // line 3 reserved
 
 /*
