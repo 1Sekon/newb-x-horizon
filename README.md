@@ -8,7 +8,7 @@ Download in the Official Newb Discord server.
 
 > [Newb X Legacy](https://discord.gg/newb-community-844591537430069279)
 >
-> [Newb X Horizon (under preparation)](https://discord.gg/newb-community-844591537430069279)
+> [Newb X Horizon (under preparation)](https://discord.com/channels/844591537430069279/1258617963364356198)
 
 ## Installation
 
