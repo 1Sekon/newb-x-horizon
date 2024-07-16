@@ -45,7 +45,7 @@
 #define NL_NIGHT_BRIGHTNESS 0.27 // 0.1 dark ~ 3.0 bright
 #define NL_CAVE_BRIGHTNESS  0.1 // 0.0 dark ~ 2.0 bright
 #define NL_SHADOW_INTENSITY 0.6 // 0.0 no shadow ~ 1.0 strong shadow
-#define NL_BLINKING_TORCH     // [toggle] flickering light
+//#define NL_BLINKING_TORCH     // [toggle] flickering light
 //#define NL_CLOUD_SHADOW       // [toggle] cloud shadow (simple clouds only)
 
 /* Sun/moon light color on terrain */
@@ -58,7 +58,7 @@
 #define NL_END_AMBIENT vec3(0.2,0.23,0.36)
 
 /* Torch colors */
-#define NL_OVERWORLD_TORCH_COL  vec3(0.7,0.46,0.39)
+#define NL_OVERWORLD_TORCH_COL  vec3(0.74,0.46,0.39)
 #define NL_UNDERWATER_TORCH_COL vec3(1.0,0.52,0.18)
 #define NL_NETHER_TORCH_COL     vec3(0.6,0.46,0.39)
 #define NL_END_TORCH_COL        vec3(0.56,0.5,0.4)
@@ -104,7 +104,7 @@
 /* Water */
 #define NL_WATER_TRANSPARENCY 0.4 // 0.0 transparent ~ 1.0 normal
 #define NL_WATER_BUMP 0.09        // 0.001 plain ~ 0.2 bumpy water
-#define NL_WATER_TEX_OPACITY 0.7  // 0.0 plain water ~ 1.0 vanilla water texture
+#define NL_WATER_TEX_OPACITY 0.8  // 0.0 plain water ~ 1.0 vanilla water texture
 #define NL_WATER_WAVE             // [toggle] wave effect
 #define NL_WATER_FOG_FADE         // [toggle] fog fade for water
 #define NL_WATER_CLOUD_REFLECTION // [toggle] simple clouds/aurora reflection
