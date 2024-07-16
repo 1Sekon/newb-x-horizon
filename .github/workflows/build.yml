@@ -90,7 +90,7 @@ jobs:
         path: ./build/pack-ios
   merged:
     runs-on: windows-2022
-    if:  ${{ github.event.inputs.platform == 'Merged' }}
+    if:  ${{ (github.event.inputs.platform == 'Merged') || (github.event.inputs.platform == 'All')}}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/cache@v4
